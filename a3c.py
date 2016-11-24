@@ -161,8 +161,8 @@ def build_graph():
     R_t = tf.placeholder("float", [None])
     a_t = tf.placeholder("float", [None, ACTIONS])
     log_prob = tf.log(tf.reduce_sum(tf.mul(p_network, a_t), reduction_indices=1))
-    p_loss = -log_prob * (R_t - v_network)
     tf.stop_gradient()
+    p_loss = -log_prob * (R_t - v_network)
     v_loss = tf.reduce_mean(tf.square(R_t - v_network))
 
     total_loss = p_loss + (0.5 * v_loss)
