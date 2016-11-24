@@ -8,7 +8,7 @@ def build_policy_and_value_networks(num_actions, agent_history_length, resized_w
         state = tf.placeholder("float", [None, agent_history_length, resized_width, resized_height])
 
         inputs = Input(shape=(agent_history_length, resized_width, resized_height,))
-        shared = Convolution2D(name="conv1", nb_filter=32, nb_row=8, nb_col=8, subsample=(4,4), activation='relu', border_mode='same')(inputs)
+        shared = Convolution2D(name="conv1", nb_filter=16, nb_row=8, nb_col=8, subsample=(4,4), activation='relu', border_mode='same')(inputs)
         shared = Convolution2D(name="conv2", nb_filter=32, nb_row=4, nb_col=4, subsample=(2,2), activation='relu', border_mode='same')(shared)
         shared = Flatten()(shared)
         shared = Dense(name="h1", output_dim=256, activation='relu')(shared)

@@ -119,7 +119,7 @@ def actor_learner_thread(num, env, session, graph_ops, summary_ops, saver):
             T += 1
             ep_t += 1
             probs_summary_t += 1
-            
+
             s_t = s_t1
 
         if terminal:
@@ -135,7 +135,7 @@ def actor_learner_thread(num, env, session, graph_ops, summary_ops, saver):
         session.run(minimize, feed_dict={R : R_batch,
                                          a : a_batch,
                                          s : s_batch})
-        
+
         # Save progress every 5000 iterations
         if T % CHECKPOINT_INTERVAL == 0:
             saver.save(session, CHECKPOINT_SAVE_PATH, global_step = T)
@@ -162,6 +162,7 @@ def build_graph():
     a_t = tf.placeholder("float", [None, ACTIONS])
     log_prob = tf.log(tf.reduce_sum(tf.mul(p_network, a_t), reduction_indices=1))
     p_loss = -log_prob * (R_t - v_network)
+    tf.stop_gradient()
     v_loss = tf.reduce_mean(tf.square(R_t - v_network))
 
     total_loss = p_loss + (0.5 * v_loss)
@@ -185,7 +186,7 @@ def setup_summaries():
 def train(session, graph_ops, saver):
     # Set up game environments (one per thread)
     envs = [gym.make(GAME) for i in range(NUM_CONCURRENT)]
-    
+
     summary_ops = setup_summaries()
     summary_op = summary_ops[-1]
 
